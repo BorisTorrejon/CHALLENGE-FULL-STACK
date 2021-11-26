@@ -7,7 +7,7 @@ const { connection } = require ('./database');
 const app = express();
 
 //Setting
-app.set('port',process.env.port||3000);
+app.set('port',process.env.port||4000);
 
 //Middelwares
 app.use(morgan('dev'));
