@@ -1,13 +1,26 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-export default function Transaction(){
+export default function Transaction(props){
     let card = {
         concept:"",
         amount:"",
         date:"",
         type:""
     }
+    useEffect(() =>{
+        if (props.transaction!=="")
+        {
+            setId("3");
+            setConcept("hola");
+            setAmount("100");
+            setDate("2021-11-01");
+            setType("1");
+            setButtonCard("edit");  
+        }
+    });
+    const [buttonCard,setButtonCard] = useState("add")
     const [transaction, setTransaction] = useState({});
+    const [id,setId]= useState("");
     const [concept, setConcept]= useState("");
     const [amount, setAmount]= useState("");
     const [date, setDate]= useState("");
@@ -27,11 +40,26 @@ export default function Transaction(){
             console.log(transaction);
         };
     };
-    const submitTransaction = async ()=>{
-        if (transaction != {}) {
-            let url ="http://localhost:4000/api/abm";
+    const submitTransaction = async (id)=>{
+        let url ="http://localhost:4000/api/abm";
+        if (id="") {
+            if (transaction != {}) {
+                let response = await fetch(url,{
+                    method:'POST',
+                    body:JSON.stringify(transaction),
+                    headers:{
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(res => res.json())
+                .then(data => console.log(data.status))
+                .catch(err => console.log(err));
+            }
+        }else{
+            url=url+"/"+id;
             let response = await fetch(url,{
-                method:'POST',
+                method:'PUT',
                 body:JSON.stringify(transaction),
                 headers:{
                     'Accept': 'application/json',
@@ -41,12 +69,12 @@ export default function Transaction(){
             .then(res => res.json())
             .then(data => console.log(data.status))
             .catch(err => console.log(err));
-            setTransaction({});
-            setConcept("");
-            setAmount("");
-            setDate("");
-            setType("");
         }
+        setTransaction({});
+        setConcept("");
+        setAmount("");
+        setDate("");
+        setType("");
     }
     return(
         <div className="col s5">
@@ -72,7 +100,7 @@ export default function Transaction(){
                                 </select>
                             </div>
                             <div className="input-field col s12">
-                                <a onClick={submitTransaction} class="btn-floating btn-large halfway-fab waves-effect light-blue darken-4"><i class="material-icons">add</i></a>
+                                <a onClick={submitTransaction} class="btn-floating btn-large halfway-fab waves-effect light-blue darken-4"><i class="material-icons">{buttonCard}</i></a>
                             </div>
                         </div>        
                     </form>

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import RowTable from './RowTable';
 
-export default function Table(){
+export default function Table(props){
     const [transactions, setTransactions] = useState([]);
 
     useEffect(() => {
@@ -26,6 +26,11 @@ export default function Table(){
         .then(data => console.log(data.status))
         .catch(err => console.log(err));
     }
+    const editTransaction = async (id) => {
+        let transaction = transactions.filter(t => t.transactionID==id);
+        console.log(transaction[0])
+        props.edit();
+    }
     return(
         <div className="col s7">
             <table>
@@ -46,6 +51,7 @@ export default function Table(){
                         concept ={transaction.transactionConcept}
                         amount  ={transaction.transactionAmount}
                         delete  ={deleteTransaction}
+                        edit    ={editTransaction}
                     >
                     </RowTable>
                 )}

@@ -1,8 +1,13 @@
+import { useState } from "react";
 import PageWrapper from "../PageWrapper";
 import Table from "./Table";
 import Transaction from "./Transaction";
 
 export default function Abm(){
+    const [card,setCard]=useState("")
+    const editPrueba = () =>{
+        setCard("desde el ABM");
+    };
     return(
         <div>
             <PageWrapper/>
@@ -11,8 +16,12 @@ export default function Abm(){
             </div>
             <div className="container">
                 <div className="row">
-                    <Transaction />
-                    <Table/>
+                    <Transaction 
+                        transaction = {card}
+                    />
+                    <Table
+                        edit = {editPrueba}
+                    />
                 </div>
             </div>
         </div>
