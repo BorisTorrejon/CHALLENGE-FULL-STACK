@@ -1,4 +1,5 @@
 import PageWrapper from "../PageWrapper";
+import Table from "./Table";
 import Transaction from "./Transaction";
 
 export default function Abm(){
@@ -11,9 +12,7 @@ export default function Abm(){
             <div className="container">
                 <div className="row">
                     <Transaction />
-                    <div className="col s7">
-
-                    </div>
+                    <Table/>
                 </div>
             </div>
         </div>

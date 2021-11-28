@@ -7,8 +7,8 @@ export default function PageWrapper(){
                 </div>
                 <div className="nav-content">
                 <ul className="tabs tabs-transparent">
-                    <li className="tab"><a className="active" href="#">Home</a></li>
-                    <li className="tab"><a href="#">ABM</a></li>
+                    <li className="tab"><a className="active" href="./">Home</a></li>
+                    <li className="tab"><a className="active" href="./abm">ABM</a></li>
                 </ul>
                 </div>
             </nav>

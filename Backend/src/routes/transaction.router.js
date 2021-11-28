@@ -2,8 +2,6 @@ const express = require ('express');
 const connection = require('../database');
 const router  = express.Router();
 
-const Transaction = require ('../models/transaction');
-
 router.get('/', async(req, res)=>{
     const sql = 'SELECT * FROM transactions';
     connection.query(sql,(error, result)=>{

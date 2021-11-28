@@ -1,34 +1,78 @@
+import { useState } from "react";
+
 export default function Transaction(){
+    let card = {
+        concept:"",
+        amount:"",
+        date:"",
+        type:""
+    }
+    const [transaction, setTransaction] = useState({});
+    const [concept, setConcept]= useState("");
+    const [amount, setAmount]= useState("");
+    const [date, setDate]= useState("");
+    const [type, setType]= useState("");
+
+    const onChangeConcept = function (evento) {setConcept(evento.target.value)};
+    const onChangeAmount = function (evento) {setAmount(evento.target.value)};
+    const onChangeDate = function (evento) {setDate(evento.target.value);console.log(date)};
+    const onChangeType = function (evento) {setType(evento.target.value);console.log(type)};
+    const onChangeCard = function() {
+        if((concept !== "")&(amount!=="")&(date!=="")){
+            card.concept=concept;
+            card.amount =amount;
+            card.date   =date;
+            card.type   =type;
+            setTransaction(card);
+            console.log(transaction);
+        };
+    };
+    const submitTransaction = async ()=>{
+        if (transaction != {}) {
+            let url ="http://localhost:4000/api/abm";
+            let response = await fetch(url,{
+                method:'POST',
+                body:JSON.stringify(transaction),
+                headers:{
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(res => res.json())
+            .then(data => console.log(data.status))
+            .catch(err => console.log(err));
+            setTransaction({});
+            setConcept("");
+            setAmount("");
+            setDate("");
+            setType("");
+        }
+    }
     return(
         <div className="col s5">
             <div className="card">
                 <div className="card-content">
-                    <form>
+                    <form onChange={onChangeCard}>
                         <div className="row">
                             <span class="card-title">Personal </span>
                             <div className="input-field col s12">
-                                <input type="text" placeholder="Concept"/>
+                                <input onChange={onChangeConcept} name="Concept" type="text" placeholder="Concept" value={concept}/>
                             </div>
                             <div className="tabs input-field col s6">
-                                <input type="text" placeholder="Monto"/>
+                                <input onChange={onChangeAmount} type="number" placeholder="Amount" value={amount}/>
                             </div>
                             <div className="tabs input-field col s6">
-                                <input type="date" placeholder="Fecha"/>
+                                <input onChange={onChangeDate} type="date" placeholder="Date" value={date}/>
                             </div>
-                            <div className="tabs input-field col s6">
-                                <label>
-                                    <input className="with-gap" name="group1" type="radio" checked />
-                                    <span>Ingreso</span>
-                                </label>
-                            </div>
-                            <div className="tabs input-field col s6">
-                                <label>
-                                    <input className="with-gap" name="group1" type="radio" checked />
-                                    <span>Egreso</span>
-                                </label>
+                            <div class="input-field col s12">
+                                <select onChange={onChangeType} class="browser-default" value={type}>
+                                    <option value="" disabled selected>Type</option>
+                                    <option value="1">Ingreso</option>
+                                    <option value="0">Egreso</option>
+                                </select>
                             </div>
                             <div className="input-field col s12">
-                                <a class="btn-floating btn-large halfway-fab waves-effect light-blue darken-4"><i class="material-icons">add</i></a>
+                                <a onClick={submitTransaction} class="btn-floating btn-large halfway-fab waves-effect light-blue darken-4"><i class="material-icons">add</i></a>
                             </div>
                         </div>        
                     </form>

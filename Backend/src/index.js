@@ -1,6 +1,7 @@
 const express = require ('express');
 const morgan  = require ('morgan');
 const path    = require ('path');
+const cors    = require ('cors');
 
 const { connection } = require ('./database');
 
@@ -12,6 +13,7 @@ app.set('port',process.env.port||4000);
 //Middelwares
 app.use(morgan('dev'));
 app.use(express.json());
+app.use(cors());
 
 //Routes
 app.use('/api/abm',require('./routes/transaction.router'));
