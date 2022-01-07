@@ -1,29 +1,22 @@
-import { useState } from "react";
 import PageWrapper from "../PageWrapper";
 import Table from "./Table";
 import Transaction from "./Transaction";
+import TransactionState from "../../context/transactions/TransactionState";
 
-export default function Abm(){
-    const [card,setCard]=useState("")
-    const editPrueba = () =>{
-        setCard("desde el ABM");
-    };
-    return(
-        <div>
-            <PageWrapper/>
-            <div className="contaier center">
-                <h3>ABM</h3>
-            </div>
+export default function Abm() {
+    return (
+        <>
+            <PageWrapper
+                title="ABM"
+            />
             <div className="container">
                 <div className="row">
-                    <Transaction 
-                        transaction = {card}
+                    <Transaction
                     />
                     <Table
-                        edit = {editPrueba}
                     />
                 </div>
             </div>
-        </div>
+        </>
     )
 }

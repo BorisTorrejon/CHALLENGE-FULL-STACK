@@ -1,35 +1,25 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useContext, useState } from 'react';
 import RowTable from './RowTable';
+import Pagination from './pagination';
+import TransactionContext from '../../context/transactions/TransactionContex';
 
-export default function Table(props){
-    const [transactions, setTransactions] = useState([]);
+export default function Table(){
+    const {transactions,getTransactions} = useContext(TransactionContext);
 
     useEffect(() => {
-        findTransactions();
-      },[]);
-    const findTransactions = async () => {
-        let url = "http://localhost:4000/api/abm";
-        let respuesta = await fetch(url).catch(err=>console.log(err));
-        let json = await respuesta.json();
-        setTransactions(json);
-    };
-    const deleteTransaction = async (id) => {
-        let url =`http://localhost:4000/api/abm/${id}`;
-        let response = await fetch(url,{
-            method:'DELETE',
-            headers:{
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            }
-        })
-        .then(res => res.json())
-        .then(data => console.log(data.status))
-        .catch(err => console.log(err));
-    }
-    const editTransaction = async (id) => {
-        let transaction = transactions.filter(t => t.transactionID==id);
-        console.log(transaction[0])
-        props.edit();
+        getTransactions();
+    },[]);
+
+    const [actualPage,setActualPage] = useState(1);
+    const [rowsPage,setRowsPage] = useState(10);
+    
+    const rows = transactions.slice(
+        (actualPage-1)*rowsPage,
+        actualPage*rowsPage
+    );
+
+    const pages= (transactions)=>{
+        return Math.ceil(transactions.length/rowsPage);
     }
     return(
         <div className="col s7">
@@ -42,21 +32,24 @@ export default function Table(props){
                         <th>Amount</th>
                     </tr>
                 </thead>
-                <tbody>
-                {transactions.map(transaction =>
+                <tbody className="tablebody">
+                {rows.map(transaction =>
                     <RowTable
                         id      ={transaction.transactionID}
                         date    ={transaction.transactionDate}
                         type    ={transaction.transactionType}
                         concept ={transaction.transactionConcept}
                         amount  ={transaction.transactionAmount}
-                        delete  ={deleteTransaction}
-                        edit    ={editTransaction}
                     >
                     </RowTable>
                 )}
                 </tbody>
             </table>
+            <Pagination
+            actualPage={actualPage}
+            pages={pages(transactions)}
+            onChange={(page)=>{setActualPage(page)}}
+            />
         </div>
     )
 }

@@ -2,13 +2,16 @@ const express = require ('express');
 const morgan  = require ('morgan');
 const path    = require ('path');
 const cors    = require ('cors');
+const dotenv = require('dotenv');
+
 
 const { connection } = require ('./database');
 
 const app = express();
 
 //Setting
-app.set('port',process.env.port||4000);
+dotenv.config();
+app.set('port',process.env.PORT || 3050);
 
 //Middelwares
 app.use(morgan('dev'));
